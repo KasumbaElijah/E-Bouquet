@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------
-    File Name: custom.js
+	File Name: custom.js
 ---------------------------------------------------------------------*/
 
 $(function () {
@@ -55,7 +55,7 @@ $(function () {
 		cursorcolor: "#9b9b9c",
 	});
 
-	
+
 	/* NiceSelect
 	-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 
@@ -151,8 +151,19 @@ $(function () {
 	/* Contact-form
 	-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 	$.validator.setDefaults({
-		submitHandler: function () {
-			alert("submitted!");
+		submitHandler: function (form) {
+			// generate a five digit number for the contact_number variable
+			if (form.contact_number) form.contact_number.value = Math.random() * 100000 | 0;
+
+			emailjs.sendForm('contact_service', 'contact_form', form)
+				.then(function () {
+					console.log('SUCCESS!');
+					alert("Message Sent Successfully!");
+					form.reset();
+				}, function (error) {
+					console.log('FAILED...', error);
+					alert("Message Failed to Send.");
+				});
 		}
 	});
 
@@ -367,5 +378,20 @@ $(function () {
 		interval: 5000
 	});
 
+
+
+	/* EmailJS Initialization & Contact Form
+	-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
+	(function () {
+		// https://dashboard.emailjs.com/admin/account
+		emailjs.init('r_k8emN41BQkgv0Ym');
+	})();
+
+
+
+	/* Dynamic Copyright Year
+	-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
+	var currentYear = new Date().getFullYear();
+	document.getElementById('displayYear').innerHTML = currentYear;
 
 });
